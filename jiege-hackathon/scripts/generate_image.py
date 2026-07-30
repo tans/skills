@@ -2,7 +2,7 @@
 """Generate or edit images through the OpenAI Images API.
 
 Use /images/generations for new images and /images/edits for reference-image
-edits. The official API is the default; a compatible endpoint is opt-in.
+edits. The configured compatible gateway is the default and can be overridden.
 """
 
 from __future__ import annotations
@@ -22,8 +22,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-DEFAULT_BASE_URL = "https://api.openai.com/v1"
-DEFAULT_MODEL = "gpt-image-1"
+DEFAULT_BASE_URL = "https://token.minapp.xin/v1"
+DEFAULT_MODEL = "gpt-image-2"
 RETRYABLE_HTTP_CODES = {408, 409, 425, 429, 500, 502, 503, 504}
 
 
