@@ -80,7 +80,7 @@ python3 scripts/generate_image.py \\
 - 默认使用 API 基址 `https://token.minapp.xin/v1` 和模型 `gpt-image-2`；需要切换网关时使用 `--base-url` 或 `OPENAI_BASE_URL` 覆盖。
 - 无参考图时调用 `/images/generations`；有参考图时调用标准 multipart 的 `/images/edits`。
 - 每个请求默认最多重试 2 次，并使用指数退避；不得因单次超时立即放弃，也不得无限重试。
-- 从环境变量 `OPENAI_API_KEY` 读取密钥；只在用户明确指定时通过 `--auth-file` 读取本地 JSON 文件。
+- 优先从环境变量 `OPENAI_API_KEY` 读取密钥；未设置时自动从 `~/.codex/auth.json` 的 `OPENAI_API_KEY` 读取，也可通过 `--auth-file` 指定其他本地 JSON 文件。
 - 不把密钥复制进代码、README、日志、前端文件或最终交付物。
 - 生图结果必须保存到项目目录并由实际页面引用，不能只提供提示词或生成后不使用。
 - 产品界面优先使用 DaisyUI 组件；不要用图片替代可交互界面。
