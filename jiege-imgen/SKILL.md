@@ -44,6 +44,7 @@ python3 scripts/generate_image.py \
 
 ## 接口与安全约束
 
+- 生图优先且必须使用 Images API 的 `POST /images/generations`；不要改用 Responses API。参考图编辑使用 `POST /images/edits`。
 - 默认 API 基址为 `https://token.minapp.xin/v1`，模型为 `gpt-image-2`；使用 `--base-url` 或 `OPENAI_BASE_URL` 覆盖。
 - 优先从环境变量 `OPENAI_API_KEY` 读取密钥；未设置时从 `~/.codex/auth.json` 的 `OPENAI_API_KEY` 读取，也可用 `--auth-file` 指定本地 JSON 文件。
 - 每个请求默认最多重试 2 次并指数退避；不得无限重试，也不得因单次超时立即放弃。
