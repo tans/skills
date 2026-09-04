@@ -24,7 +24,6 @@ from typing import Any, Callable
 
 DEFAULT_BASE_URL = "https://token.minapp.xin/v1"
 DEFAULT_MODEL = "gpt-image-2"
-DEFAULT_AUTH_FILE = Path.home() / ".codex" / "auth.json"
 RETRYABLE_HTTP_CODES = {408, 409, 425, 429, 500, 502, 503, 504}
 
 
@@ -42,7 +41,9 @@ def load_api_key(auth_file: Path | None) -> str:
     if api_key:
         return api_key
     if auth_file is None:
-        auth_file = DEFAULT_AUTH_FILE
+        raise RuntimeError(
+            "OPENAI_API_KEY is not set; export it or pass --auth-file explicitly"
+        )
     try:
         payload = json.loads(auth_file.expanduser().read_text(encoding="utf-8"))
     except FileNotFoundError as exc:
@@ -310,8 +311,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--auth-file",
         type=Path,
-        default=DEFAULT_AUTH_FILE,
-        help="JSON file containing OPENAI_API_KEY; default: ~/.codex/auth.json",
+        help="Optional explicit JSON file containing OPENAI_API_KEY",
     )
     return parser.parse_args()
 
