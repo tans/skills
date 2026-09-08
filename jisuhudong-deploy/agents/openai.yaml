@@ -1,0 +1,4 @@
+interface:
+  display_name: "极速互动部署"
+  short_description: "宝塔部署或更新 *.jisuhudong.com 产品"
+  default_prompt: "使用 $jisuhudong-deploy 部署或更新这个项目到极速互动宝塔主机。"

@@ -6,6 +6,7 @@
 | --- | --- |
 | `$jiege-hackathon` | 通过提问完善想法，再做成可运行的小产品 |
 | `$jiege-imgen` | 生成、编辑并接入项目图片 |
+| `$jisuhudong-deploy` | 通过 SSH 和宝塔部署或更新 `*.jisuhudong.com` 产品 |
 
 ## 使用
 
