@@ -2,7 +2,7 @@
 name: jisuhudong-deploy
 slug: jisuhudong-deploy-user-e866c542
 displayName: 极速互动部署
-version: 1.0.0
+version: 1.0.1
 summary: 通过 SSH 和宝塔把项目部署到 *.jisuhudong.com，并支持后续更新。
 description: 将已有 Web/Node 服务部署或更新到极速互动的宝塔主机，统一使用 *.jisuhudong.com 子域名，项目与数据放在 /data 下。适用于需要真实服务器、域名、反向代理、进程守护和 HTTPS 验收的部署请求；不用于只做本地启动或静态部署方案评估。
 ---
@@ -21,12 +21,13 @@ description: 将已有 Web/Node 服务部署或更新到极速互动的宝塔主
 1. 从项目的 README、package/build 文件和 `.env.example` 确定启动命令、监听端口、健康检查、构建产物和持久化目录。缺失且无法推断的关键值只问一个问题。
 2. 确认或复用本地私钥，使用 `ssh -o BatchMode=yes` 测试连接；首次保存前验证用户明确给出的主机、用户名和指纹，不关闭 HostKey 校验。
 3. 远端检查 OS、宝塔安装、Nginx/OpenResty、`/www/server/panel/vhost/nginx`、面板站点数据库和端口占用。已存在同一 slug 时进入更新流程，不重复建站或覆盖数据。
-4. 创建 `/data/<slug>` 及子目录，上传或拉取代码，安装锁文件对应依赖，构建并以非特权用户运行（项目需要 root 时说明原因）。把 secrets 写入远端 `0600` 配置文件或进程环境，不提交 `.env`。
-5. 用宝塔站点能力创建/更新站点和反向代理：HTTP/HTTPS 的 server_name 均为 `<slug>.jisuhudong.com`，代理到本机回环地址，设置 WebSocket 和真实客户端头；优先使用宝塔 CLI/API，面板 API 关闭时才编辑其生成配置并用 `nginx -t` 后 reload。不要只写一个脱离宝塔记录的 Nginx vhost。
-6. 用宝塔可管理的进程方式（Node 项目管理、Supervisor、systemd 或 Docker，按项目现状选择）启动并设置开机恢复；记录实际 PID/容器、监听端口和日志路径。
-7. 配置 DNS 只在用户授权且已有 DNS 凭据时执行；否则报告需要把 `<slug>.jisuhudong.com` 指向目标主机的记录。
-8. 申请或配置 HTTPS（宝塔证书/ACME），然后从外部验证：DNS、HTTP 重定向、HTTPS 证书域名、首页或健康接口、关键业务路径和更新后的版本标识。仅 `curl 127.0.0.1`、Docker health 或 HTTP 200 不算完成。
-9. 更新时先比较当前版本和目标版本，优雅停止，备份，部署到临时目录后切换；失败自动恢复上一版本并再次验证。报告真实覆盖范围和任何未验证的外部依赖。
+4. 仅当确认项目是非静态应用且同一 slug 尚未部署时，让用户在 `Docker` 与 `直接运行` 中二选一，并记录选择后沿用，后续更新不得擅自切换。静态站点不进入此选择，按宝塔静态站点流程处理。
+5. 创建 `/data/<slug>` 及子目录，上传或拉取代码，安装锁文件对应依赖，构建并以非特权用户运行（项目需要 root 时说明原因）。把 secrets 写入远端 `0600` 配置文件或进程环境，不提交 `.env`。
+6. 按首次选择部署：`Docker` 使用项目既有 `Dockerfile`/Compose，容器和卷命名包含 slug，持久卷映射到 `/data/<slug>/data`，设置重启策略；`直接运行` 使用宝塔 Node 项目管理、Supervisor 或 systemd，工作目录和日志均在 `/data/<slug>`，设置开机恢复。记录实际 PID/容器、监听端口和日志路径。
+7. 用宝塔站点能力创建/更新站点和反向代理：HTTP/HTTPS 的 server_name 均为 `<slug>.jisuhudong.com`，代理到本机回环地址，设置 WebSocket 和真实客户端头；优先使用宝塔 CLI/API，面板 API 关闭时才编辑其生成配置并用 `nginx -t` 后 reload。不要只写一个脱离宝塔记录的 Nginx vhost。
+8. 配置 DNS 只在用户授权且已有 DNS 凭据时执行；否则报告需要把 `<slug>.jisuhudong.com` 指向目标主机的记录。
+9. 申请或配置 HTTPS（宝塔证书/ACME），然后从外部验证：DNS、HTTP 重定向、HTTPS 证书域名、首页或健康接口、关键业务路径和更新后的版本标识。仅 `curl 127.0.0.1`、Docker health 或 HTTP 200 不算完成。
+10. 更新时先比较当前版本和目标版本，优雅停止，备份，部署到临时目录后切换；沿用已记录的 Docker/直接运行方式。失败自动恢复上一版本并再次验证。报告真实覆盖范围和任何未验证的外部依赖。
 
 ## 主机事实和参考
 
