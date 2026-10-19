@@ -23,10 +23,12 @@ description: 使用兼容 OpenAI Images API 的网关生成、编辑和落地项
 
 ## 快速用法
 
+脚本随技能安装，运行时请把 `jiege-imgen` 技能目录作为当前目录，或把下面命令中的脚本路径替换为该目录下 `scripts/generate_image.py` 的绝对路径。路径含空格时加引号。
+
 生成新图：
 
 ```bash
-python3 scripts/generate_image.py \
+python3 "/path/to/jiege-imgen/scripts/generate_image.py" \
   --prompt "清晰描述主体、用途、构图、风格和画面比例" \
   --size 1536x1024 \
   --quality high \
@@ -36,8 +38,8 @@ python3 scripts/generate_image.py \
 编辑参考图：
 
 ```bash
-python3 scripts/generate_image.py \
-  --input-image ./source.png \
+python3 "/path/to/jiege-imgen/scripts/generate_image.py" \
+  --input-image "/path/to/source.png" \
   --prompt "保留主体构图，改为科幻风格" \
   --size 1024x1024 \
   --quality high \
@@ -45,6 +47,17 @@ python3 scripts/generate_image.py \
 ```
 
 提示词较长时可使用 `--prompt-file ./image-prompt.txt` 替代 `--prompt`。
+
+## macOS 环境
+
+- 脚本需要 Python 3.10 或更新版本。先运行 `python3 --version`；若命令不存在或版本过旧，安装较新的 Python 3（例如通过 Homebrew 或 python.org 安装包），然后重开终端确认版本。
+- macOS 默认 shell 通常是 zsh。将 `OPENAI_API_KEY` 设置在当前终端环境后，从同一终端启动脚本；也可使用技能支持的显式 `--auth-file`。不要把密钥提交到项目或写进提示词文件。
+- Finder 路径含空格时给完整路径加双引号。脚本可直接读写 PNG、JPEG 等常用路径；相对输入、输出和提示词文件路径均以终端当前目录为准，输出目录会自动创建。
+- iPhone 照片或截图若为 HEIC 且编辑接口不接受该格式，可用 macOS 自带的 `sips` 转成 PNG，再将转换后的文件传给 `--input-image`：
+
+  ```bash
+  sips -s format png "/path/to/source.heic" --out "/path/to/source.png"
+  ```
 
 ## 接口与安全约束
 
