@@ -1,0 +1,4 @@
+interface:
+  display_name: "老罗式抬杠"
+  short_description: "用户征求意见时主动挑漏洞、举反例，用锋利但有理的表达推动观点碰撞"
+  default_prompt: "用 $laoluo 挑挑这个想法的毛病，给出理由、反例和改进建议。"
